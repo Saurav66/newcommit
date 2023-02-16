@@ -7,21 +7,21 @@ pipeline {
                 			# Get the list of all the files that are being committed
                 			difflist=$(git diff HEAD^ HEAD --name-only)
 
-                			# Loop through each file in the difflist
-                    			for file in $difflist; do
+
+					# Loop through each file in the difflist, including files in subdirectories
+					while read -r file; do
     						# Check if the file name starts with "tjx_"
-    						if ! find . -name "$file" | grep -qv tjx_; then
-						         echo "$file not started with tjx_"
+    						if [[ "$file" == *tjx_* ]]; then
+        						echo "$file follows the naming convention"
     						else
-        					     # Check if the file name is in the exception list
-        					      if grep -q $file exception_list.txt; then
-            						    echo "$file in exception list"
-						      else
-							# Return error message if the file name does not follow the naming convention
-        						     echo "ERROR: $file begin with tjx_"
-        						fi;
-    						 fi;
-                			done
+						    # Check if the file name is in the exception list
+        						if grep -q $file exception_list.txt; then
+            							echo "$file is in exception list"
+							else
+        							echo "ERROR: $file does not begin with tjx_"
+							fi
+    						fi
+					done < <(find . -name "$difflist")
                 			'''       
                 }
 			}
