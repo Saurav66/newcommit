@@ -16,11 +16,11 @@ pipeline {
     						else
 						    # Check if the file name is in the exception list
         						if grep -q $file exception_list.txt; then
-            							echo "$file is in exception list"
+            							echo "$file is in exception list";
 							else
-        							echo "ERROR: $file does not begin with tjx_"
-							fi
-    						fi
+        							echo "ERROR: $file does not begin with tjx_";
+							fi;
+    						fi;
 					done < <(find . -name "$difflist")
                 			'''       
                 }
