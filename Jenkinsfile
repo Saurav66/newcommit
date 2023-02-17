@@ -4,13 +4,9 @@ pipeline {
 			stage("Check commit")	{
 				steps {
               			sh '''
-                            # Get the list of all the files that are being committed
-                		filename_list=$(git diff HEAD^ HEAD --name-only)
-
-                            # Set the file naming standard
-                            naming_standard="tjx_"
-
-                            # Loop through each filename in filename_list
+                 			# Get the list of all the files that are being committed
+                			difflist=$(git diff HEAD^ HEAD --name-only)
+							# Loop through each file in the difflist, including files in subdirectories
 							for file in $difflist_for_one; do    			
 								# Check if the file name starts with "tjx_"
     							if echo "$file" | grep -q "tjx_"; then
