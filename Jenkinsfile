@@ -11,7 +11,7 @@ pipeline {
 					# Loop through each file in the difflist, including files in subdirectories
 					for file in $difflist; do    			
 						# Check if the file name starts with "tjx_"
-    						if [ "$file" == *tjx_* ]; then
+    						if [ "$file" == "*tjx_*" ]; then
         						echo "$file follows the naming convention"
     						else
 						    # Check if the file name is in the exception list
