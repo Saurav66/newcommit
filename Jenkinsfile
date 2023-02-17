@@ -4,26 +4,30 @@ pipeline {
 			stage("Check commit")	{
 				steps {
               			sh '''
-                			# Get the list of all the files that are being committed
-					difflist_for_one=$(git diff HEAD^ HEAD --name-only)
-                			difflist_for_two=$(git diff HEAD~3..HEAD --name-only)										
-                			difflist_for_three=$(git diff HEAD~3..HEAD --name-only)
+                            # Get the list of all the files that are being committed
+                			filename_list=$(git diff HEAD^ HEAD --name-only)
+                			difflist_two=$(git diff HEAD~3..HEAD --name-only)										
+                			difflist_three=$(git diff HEAD~3..HEAD --name-only)
 
+                            # Set the file naming standard
+                            naming_standard="tjx_"
 
-					# Loop through each file in the difflist, including files in subdirectories
-					for file in $difflist_for_one; do    			
-						# Check if the file name starts with "tjx_"
-    						if echo "$file" | grep -q "tjx_"; then
-        						echo "$file follows the naming convention"
-    						else
-						    # Check if the file name is in the exception list
-        						if grep -q $file exception_list.txt; then
-            							echo "$file is in exception list";
-							else
-        							echo "ERROR: $file does not begin with tjx_";
-							fi;
-    						fi;
-					done
+                            # Loop through each filename in filename_list
+                            while read -r filename; do
+                            # Check if the filename starts with the naming standard
+                                if [[ "$filename" == "${naming_standard}"* ]]; then
+                                    echo "Filename $filename meets the naming standard."
+                                else
+                                    # Check if the filename is in the exception list
+                                    if grep -q "$filename" CI/exception_list.txt; then
+                                        echo "Filename $filename is in the exception list."
+                                    else
+                                        # Print an error message if the filename does not follow the naming convention
+                                        echo "ERROR: $filename does not begin with $naming_standard"
+                                        exit 1
+                                    fi
+                                fi
+                            done < filename_list
                 			'''       
                 }
 			}
