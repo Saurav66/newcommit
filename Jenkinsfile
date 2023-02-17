@@ -5,9 +5,7 @@ pipeline {
 				steps {
               			sh '''
                             # Get the list of all the files that are being committed
-                			filename_list=$(git diff HEAD^ HEAD --name-only)
-                			difflist_two=$(git diff HEAD~3..HEAD --name-only)										
-                			difflist_three=$(git diff HEAD~3..HEAD --name-only)
+                		filename_list=$(git diff HEAD^ HEAD --name-only)
 
                             # Set the file naming standard
                             naming_standard="tjx_"
@@ -27,7 +25,7 @@ pipeline {
                                         exit 1
                                     fi
                                 fi
-                            done < filename_list
+                            done < $filename_list
                 			'''       
                 }
 			}
