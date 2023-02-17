@@ -21,7 +21,7 @@ pipeline {
         							echo "ERROR: $file does not begin with tjx_";
 							fi;
     						fi;
-					done < <(find . -name "$difflist")
+					done < (find . -name "$difflist")
                 			'''       
                 }
 			}
