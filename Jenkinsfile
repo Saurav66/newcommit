@@ -9,8 +9,8 @@ pipeline {
 
 
 					# Loop through each file in the difflist, including files in subdirectories
-					while read -r file; do
-    						# Check if the file name starts with "tjx_"
+					for file in $difflist; do    			
+						# Check if the file name starts with "tjx_"
     						if [[ "$file" == *tjx_* ]]; then
         						echo "$file follows the naming convention"
     						else
@@ -21,7 +21,7 @@ pipeline {
         							echo "ERROR: $file does not begin with tjx_";
 							fi;
     						fi;
-					done <<< "$difflist"
+					done
                 			'''       
                 }
 			}
