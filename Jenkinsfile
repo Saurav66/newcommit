@@ -13,7 +13,8 @@ pipeline {
                             # Loop through each filename in filename_list
                             while read -r filename; do
                             # Check if the filename starts with the naming standard
-                                if [[ "$filename" == "${naming_standard}"* ]]; then
+                               # if [[ "$filename" == "${naming_standard}"* ]]; then
+			        if echo "$filename" | grep -q "$naming_standard"; then
                                     echo "Filename $filename meets the naming standard."
                                 else
                                     # Check if the filename is in the exception list
