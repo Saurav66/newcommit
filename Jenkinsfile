@@ -4,8 +4,15 @@ pipeline {
 			stage("Check commit")	{
 				steps {
               			sh '''
-                 			# Get the list of all the files that are being committed
-                			difflist=$(git diff HEAD^ HEAD --name-only)
+                             		# Set difflist based on the number of latest commits
+                            		if [ $(git log --pretty=oneline | wc -l) -eq 1 ]; then
+                                		difflist=$(git diff HEAD^ HEAD --name-only)
+                            		elif [ $(git log --pretty=oneline | wc -l) -eq 2 ]; then
+                                		difflist=$(git diff HEAD~2..HEAD --name-only)
+                            		else
+                                		difflist=$(git diff HEAD~3..HEAD --name-only)
+                            		fi
+				
 					# Loop through each file in the difflist, including files in subdirectories
 					for file in $difflist; do    			
 						# Check if the file name starts with "tjx_"
