@@ -5,7 +5,7 @@ pipeline {
 				steps {
               			sh '''
                 			# Get the list of all the files that are being committed
-                			difflist=$(git diff HEAD^ HEAD --name-only)
+                			difflist=$(git diff HEAD~3..HEAD --name-only)
 
 
 					# Loop through each file in the difflist, including files in subdirectories
