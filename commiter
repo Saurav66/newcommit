@@ -1,37 +1,38 @@
-
 pipeline {
-   agent any
-			stage("Check commit")	{
-				steps {
-              		sh '''
-                        # Initialize the list of committers
-                         committers=()
+    agent any
+    stages {
+        stage("Check commit") {
+            steps {
+                sh '''
+                    # Initialize the list of committers
+                    committers=()
 
-                        # Get the list of files that were committed in the last 7 days
-                        allfiles=$(git log --since="7 days ago" --name-only --pretty=format: | sort -u)
+                    # Get the list of files that were committed in the last 7 days
+                    allfiles=$(git log --since="7 days ago" --name-only --pretty=format: | sort -u)
 
-                        # Loop through all files and check if the file name starts with "tjx_"
-                        for file in $allfiles; do
-	                          if [[ $file == tjx_* ]]; then
-    	                          # Check if the file name is in the exception list
-    	                          if grep -q $file exception_list.txt; then
-        	                            continue
-    	                          else
-        	                        # Store the committer of the file
-        	                        committer=$(git log --format="%an" -n 1 -- $file)
-        	                        committers+=($committer)
-        	                        # Generate an error message for the file
-        	                        error_message="ERROR: $file does not begin with tjx_ (committed by $committer)"
-        	                        echo $error_message
-        	                        # Append the error message to the report file
-        	                        echo $error_message >> report.txt
-    	                          fi
-	                          fi
-                      done
+                    # Loop through all files and check if the file name starts with "tjx_"
+                    for file in $allfiles; do
+                        if [[ $file == tjx_* ]]; then
+                            # Check if the file name is in the exception list
+                            if grep -q "$file" exception_list.txt; then
+                                continue
+                            else
+                                # Store the committer of the file
+                                committer=$(git log --format="%an" -n 1 -- "$file")
+                                committers+=("$committer")
+                                # Generate an error message for the file
+                                error_message="ERROR: $file does not begin with tjx_ (committed by $committer)"
+                                echo "$error_message"
+                                # Append the error message to the report file
+                                echo "$error_message" >> report.txt
+                            fi
+                        fi
+                    done
 
-                      # Write the list of committers to a file
-                      echo "${committers[@]}" > committers.csv
-		            '''   
-	            }
-	        }
-	}
+                    # Write the list of committers to a file
+                    echo "${committers[@]}" > committers.csv
+                '''
+            }
+        }
+    }
+}
