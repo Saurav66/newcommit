@@ -31,6 +31,7 @@ pipeline {
 
                       # Write the list of committers to a file
                       echo "${committers[@]}" > committers.csv
+		      '''
 		      
 	}
 	}
