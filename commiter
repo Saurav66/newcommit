@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage("Check commit") {
             steps {
-                sh '''
+                sh '#!/bin/bash
                     # Initialize the list of committers
                     committers=()
 
@@ -31,7 +31,7 @@ pipeline {
 
                     # Write the list of committers to a file
                     echo "${committers[@]}" > committers.csv
-                '''
+                '
             }
         }
     }
