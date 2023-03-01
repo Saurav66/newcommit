@@ -13,6 +13,7 @@ pipeline {
                                 		difflist=$(git diff HEAD~3..HEAD --name-only)
                             		fi
 					count=0
+					filenames=""
 					# Loop through each file in the difflist, including files in subdirectories
 					for file in $difflist; do    			
 						# Check if the file name starts with "tjx_"
@@ -25,11 +26,12 @@ pipeline {
 							else
         							echo "ERROR: $file does not begin with tjx_";
 								count=$((count+1))
+								filenames="$filenames $file"
 							fi;
     						fi;
 					done
 					if [ $count -gt 0 ]; then
-						echo "ERROR: $count file(s) do(es) not follow the naming convention"
+						echo "$filenames"
 					fi
                 			'''       
                 }
