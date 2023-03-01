@@ -32,7 +32,7 @@ pipeline {
 					done
 					if [ $count -gt 0 ]; then
 						echo "$filenames"
-						exit
+						exit 1
 					fi
                 			'''       
                 }
